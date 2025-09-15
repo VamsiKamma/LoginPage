@@ -218,7 +218,7 @@ function LoginPage() {
                 </Typography>
               )}
 
-              <Button
+               <Button
                 type="submit"
                 variant="contained"
                 size="small"
@@ -228,12 +228,16 @@ function LoginPage() {
                   background: "#4C33DB",
                   textTransform: "none",
                   fontWeight: "bold",
-                  width: { xs: "100%", sm: "120px" },
-                  fontSize: { xs: "0.75rem", sm: "0.8rem" },
+                 width: { xs: "40%", sm: "150px", md: "180px" },
+                   fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
+                   py: { xs: 1, sm: 1.0 }, 
                 }}
               >
                 Next →
-              </Button>
+              </Button> 
+
+            
+
             </form>
           )}
 
@@ -374,8 +378,9 @@ function LoginPage() {
                   background: "#4C33DB",
                   textTransform: "none",
                   fontWeight: "bold",
-                  width: { xs: "100%", sm: "120px" },
-                  fontSize: { xs: "0.75rem", sm: "0.8rem" },
+                 width: { xs: "40%", sm: "140px", md: "160px" }, 
+                 fontSize: { xs: "0.75rem", sm: "0.8rem", md: "0.9rem" }, 
+                 py: { xs: 1, sm: 1.2 }, 
                 }}
               >
                 Log in
