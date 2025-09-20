@@ -26,20 +26,34 @@ function LoginPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const navigate = useNavigate();
 
-  const validateEmail = (value) => {
-   
-    return /^\S+@\S+\.\S+$/.test(value);
-  };
+  const validateEmail = (value) => /^\S+@\S+\.\S+$/.test(value);
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
     if (!email || !validateEmail(email)) {
       setError("Please enter a valid Email.");
       return;
     }
-    setError("");
-    setStep(2);
+
+    try {
+      
+      const res = await axios.post(
+        "https://9342c8631dc7.ngrok-free.app/api/check_email",
+        { email }
+      );
+      
+      if (res.data.exists) {
+        setError("");
+        setStep(2);
+      } else {
+        setError("Email not found.");
+      }
+    } catch (err) {
+      setError("Failed to validate email. Try again.");
+    }
   };
+
+  
 
   const handleBack = () => {
     setStep(1);
@@ -47,7 +61,36 @@ function LoginPage() {
     setError("");
   };
 
-  const handleLogin = async (e) => {
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+
+  //   if (!password) {
+  //     setError("Please enter your password.");
+  //     return;
+  //   }
+
+  //   if (!acceptedTerms) {
+  //     setError("You must agree to the Terms and Conditions.");
+  //     return;
+  //   }
+
+  //  try {
+  //     const res = await axios.post(
+  //       "https://9342c8631dc7.ngrok-free.app/api/auth/login",
+  //       { email, password }
+  //     );
+
+  //     const { token, user } = res.data;
+  //     localStorage.setItem("token", token);
+  //     localStorage.setItem("user", JSON.stringify(user));
+  //     navigate("/dashboard");
+  //   } catch (err) {
+  //     setError(err.response?.data?.message || "Login failed. Try again.");
+  //   }
+  // };
+
+   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -62,21 +105,27 @@ function LoginPage() {
     }
 
     try {
-      const res = await axios.get("http://localhost:3000/users");
-      const users = res.data;
+      const res = await axios.post(
+        "https://9342c8631dc7.ngrok-free.app/api/auth/login",
+        { email, password }
+      );
 
-      const user = users.find((u) => u.email === email && u.password === password);
+      const { token } = res.data;
+      localStorage.setItem("token", token)
+      const userDetailsRes = await axios.get(
+        "https://9342c8631dc7.ngrok-free.app/api/details",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      if (user) {
-        const token = user.token || "dummy-token";
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/dashboard");
-      } else {
-        setError("Invalid email or password.");
-      }
+      const userDetails = userDetailsRes.data;
+      localStorage.setItem("user", JSON.stringify(userDetails));
+      navigate("/dashboard");
     } catch (err) {
-      setError("Login failed. Try again.");
+      setError(err.response?.data?.message || "Login failed. Try again.");
     }
   };
 
