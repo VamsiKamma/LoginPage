@@ -68,7 +68,7 @@ function MainDashboard() {
     }
   }
 
-  // Redirect to login if no token
+ 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login", { replace: true });

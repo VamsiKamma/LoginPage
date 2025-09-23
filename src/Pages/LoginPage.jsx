@@ -37,19 +37,20 @@ function LoginPage() {
 
     try {
       
-      const res = await axios.post(
-        "https://9342c8631dc7.ngrok-free.app/api/check_email",
+      const res = await axios.post( 
+        "https://3e6e128726c4.ngrok-free.app/api/check_email",
         { email }
       );
       
       if (res.data.exists) {
-        setError("");
-        setStep(2);
+       setError("");
+       setStep(2);
       } else {
         setError("Email not found.");
       }
     } catch (err) {
-      setError("Failed to validate email. Try again.");
+      setError ("Failed to validate email. Try again.");
+      
     }
   };
 
@@ -61,36 +62,7 @@ function LoginPage() {
     setError("");
   };
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
-
-  //   if (!password) {
-  //     setError("Please enter your password.");
-  //     return;
-  //   }
-
-  //   if (!acceptedTerms) {
-  //     setError("You must agree to the Terms and Conditions.");
-  //     return;
-  //   }
-
-  //  try {
-  //     const res = await axios.post(
-  //       "https://9342c8631dc7.ngrok-free.app/api/auth/login",
-  //       { email, password }
-  //     );
-
-  //     const { token, user } = res.data;
-  //     localStorage.setItem("token", token);
-  //     localStorage.setItem("user", JSON.stringify(user));
-  //     navigate("/dashboard");
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || "Login failed. Try again.");
-  //   }
-  // };
-
-   const handleLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -104,31 +76,22 @@ function LoginPage() {
       return;
     }
 
-    try {
+   try {
       const res = await axios.post(
-        "https://9342c8631dc7.ngrok-free.app/api/auth/login",
+        "https://3e6e128726c4.ngrok-free.app/api/auth/login",
         { email, password }
       );
 
-      const { token } = res.data;
-      localStorage.setItem("token", token)
-      const userDetailsRes = await axios.get(
-        "https://9342c8631dc7.ngrok-free.app/api/details",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const userDetails = userDetailsRes.data;
-      localStorage.setItem("user", JSON.stringify(userDetails));
+      const { token, user } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Try again.");
     }
   };
 
+   
   return (
     <>
       
